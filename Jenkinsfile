@@ -1,20 +1,24 @@
 pipeline {
     agent any
+
     options {
         skipStagesAfterUnstable()
     }
+
     tools {
         maven '3.9.11'
     }
+
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean compile'
+                sh './mvnw clean compile'
             }
         }
+
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh './mvnw test'
             }
             post {
                 always {
@@ -22,16 +26,17 @@ pipeline {
                 }
             }
         }
+
         stage('Package') {
             steps {
-                sh 'mvn package'
+                sh './mvnw package'
             }
         }
+
         stage('Deliver') {
             steps {
-                sh 'ls -F'
-                sh './jenkins/scripts/deliver.sh'
+                echo 'Artifact ready: target/spring-boot-complete-0.0.1-SNAPSHOT.jar'
             }
         }
     }
-} 
+}
